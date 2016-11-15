@@ -1,0 +1,50 @@
+apiVersion: apps/v1alpha1
+kind: PetSet
+metadata:
+  name: mongodb111
+spec:
+  replicas: 1
+  serviceName: "mongodb"
+  template:
+    metadata:
+      labels:
+        app: mongodb
+        component: mongodb
+      annotations:
+        pod.alpha.kubernetes.io/initialized: "true"
+    spec:
+      containers:
+      - image: image-path
+        imagePullPolicy: Always
+        name: mongo111
+        ports:
+        - name: mongo-port
+          containerPort: 27017
+          hostPort: 27017
+        volumeMounts:
+        - name: mongo-data
+          mountPath: /data/db
+      volumes:
+      - name: mongo-data
+        nfs:
+          path: path of nfs share
+          server: nfsserverip or hostname
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: mongodb
+  namespace: mongodb111
+  labels:
+    app: mongodb
+spec:
+  ports:
+  - name: mongo-port
+    nodePort: 32071
+    port: 27017
+    protocol: TCP
+    targetPort: 27017
+  type: NodePort
+  selector:
+    app: mongodb
+  sessionAffinity: None
