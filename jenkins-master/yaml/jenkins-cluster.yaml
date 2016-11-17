@@ -1,0 +1,61 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: NAMESPACE
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: NAMESPACE-jenkins
+  labels:
+    name: NAMESPACE-jenkins
+  namespace: NAMESPACE
+  annotations:
+    kubernetesReverseproxy: "{\"hosts\": [{\"host\": \"jenkins-NAMESPACE.CL_NAME.***.**.com\", \"port\": \"443\", \"ssl\": 1, \"sslCrt\": \"CL_NAME.***.**.crt\", \"sslKey\": \"CL_NAME.***.***.com.key\"}]}"
+spec:
+  ports:
+    - port: 8080
+      targetPort: 8080
+      protocol: TCP
+  selector:
+    app: NAMESPACE-jenkins
+---
+apiVersion: v1
+kind: ReplicationController
+metadata:
+  name: NAMESPACE-jenkins
+  labels:
+    name: NAMESPACE-jenkins
+  namespace: NAMESPACE
+spec:
+  replicas: 1
+  selector:
+    app: NAMESPACE-jenkins
+  template:
+    metadata:
+      labels:
+        app: NAMESPACE-jenkins
+    spec:
+      volumes:
+      - name: nfs
+        nfs:
+          server: NFS-SERVER host or IP 
+          path: "/nfs-share/namespaces/NAMESPACE/apps/jenkins-master"
+      serviceAccount: NAMESPACE
+      containers:
+      - name: NAMESPACE-jenkins-master
+        image: solrreg.***.com/jenkins:latest
+        ports:
+        - containerPort: 8080
+          protocol: TCP
+        imagePullPolicy: Always
+        env:
+          - name: POD_NS
+            valueFrom:
+              fieldRef:
+                fieldPath: metadata.namespace
+        volumeMounts:
+        - name: nfs
+          readonly: false
+          mountPath: "/var/lib/jenkins"
+      restartPolicy: Always
