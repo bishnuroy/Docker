@@ -20,4 +20,18 @@ Learn more about Solr on the [Solr Wiki](https://cwiki.apache.org/confluence/dis
 $git clone https://github.com/bishnuroy/Docker/tree/master/solr-banana
 $ cd /solr-banana
 $ docker build -t solrreg.***.com/solr-banana:latest .
+$docker images
 ```
+
+
+
+**How to use this Docker image**
+Standalone Solr (with Banana) example
+
+1. Start standalone Solr (with Banana)
+
+$ docker run -d -p 8984:8983 --name solr -e ENABLE_CORS=true -e CORE_NAME=collection1 solrreg.***.com/solr-banana:latest
+
+2. Check container ID
+
+$ docker ps
