@@ -36,5 +36,5 @@
   Command To access The Container in kub-Cluster:
     
       
-      kubectl --server=(kub-master-server):8080 --namespace=NAMESPACE -
+      kubectl --server=(kub-master-server):8080 --namespace=NAMESPACE exec -ti (container-name) -- bash
 
