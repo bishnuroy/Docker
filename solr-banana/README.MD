@@ -17,8 +17,7 @@ Learn more about Solr on the [Solr Wiki](https://cwiki.apache.org/confluence/dis
 ## How to build this Docker image
 
 ```
-$mkdir /solr-banana
-
+$git clone https://github.com/bishnuroy/Docker/tree/master/solr-banana
 $ cd /solr-banana
 $ docker build -t solrreg.***.com/solr-banana:latest .
 ```
