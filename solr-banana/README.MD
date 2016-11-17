@@ -35,3 +35,5 @@ $ docker run -d -p 8984:8983 --name solr -e ENABLE_CORS=true -e CORE_NAME=collec
 2. Check container ID
 
 $ docker ps
+
+**Source:** https://github.com/mosuka
