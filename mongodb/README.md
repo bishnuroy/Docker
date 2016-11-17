@@ -6,4 +6,3 @@ $cd /mongodb-image
 $docker build -t solrreg.***.com/mongodb-image:latest .
 ```
 
-**Source:** https://github.com/mosuka
