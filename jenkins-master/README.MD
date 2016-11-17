@@ -12,8 +12,29 @@
   
       $ docker build -t solrreg.***.com/jenkins:latest .
       
+      **Taging The Docker Image:**
+      
+      $ docker tag ceb8131e4945(docker-image-ID) solrreg.***.com/jenkins:latest .
+      $docker push solrreg.***.com/jenkins:latest .
+      
  
- Run Docker Container in Kubernatis Cluster:
+ **Run Docker Container in Kubernatis Cluster:
  
-  kubectl --server=(kub-master-server):8080 --namespace=NAMESPACE create -f namespace.yaml
+      kubectl --server=(kub-master-server):8080 --namespace=NAMESPACE create -f jenkins-cluster.yaml
+    
+    Check Container:
+      
+      kubectl --server=(kub-master-server):8080 --namespace=NAMESPACE get pods
+      kubectl --server=(kub-master-server):8080 --namespace=NAMESPACE get service
+      kubectl --server=(kub-master-server):8080 --namespace=NAMESPACE get rc
+      kubectl --server=(kub-master-server):8080 --namespace=NAMESPACE get petset
+      
+      kubectl --server=(kub-master-server):8080 --namespace=NAMESPACE describe pod (podName)
+      kubectl --server=(kub-master-server):8080 --namespace=NAMESPACE describe service (serviceName)
+  
+  
+  Command To access The Container in kub-Cluster:
+    
+      
+      kubectl --server=(kub-master-server):8080 --namespace=NAMESPACE -
 
