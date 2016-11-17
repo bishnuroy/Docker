@@ -1,1 +1,52 @@
-1
+kind: PetSet
+apiVersion: apps/v1alpha1
+metadata:
+  name: solrbanana
+  namespace: NAMESPACE
+spec:
+  serviceName: solrbanana
+  template:
+    metadata:
+      labels:
+        app: solrbanana
+        service: solrbanana
+    spec:
+      volumes:
+        - name: solr-data
+          nfs:
+            server: "NFS-SERVER"
+            path: "/solr-share/namespace/NAMESPACE/solr"
+      containers:
+        - name: solr-banana
+          image: solrreg.***.com/solr-banana:latest
+          imagePullPolicy: Always
+          env:
+           - name: ENABLE_CORS
+             value: "true"
+           - name: CORE_NAME
+             value: "NAMESPACE"
+          ports:
+            - containerPort: 8983
+              name: solr-tcp
+          volumeMounts:
+            - name: solr-data
+              mountPath: "/home/solr/solr-5.5.3/server/solr"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: solrweb
+  namespace: NAMESPACE
+  labels:
+    service: solrbanana
+    app: solrbanana
+  annotations:
+    kubernetesReverseproxy: "{\"hosts\": [{\"host\": \"solr-NAMESPACE.***.com\", \"port\": \"443\", \"ssl\": 1, \"path\": [\"/solr\"], \"defaultPath\": \"/solr\", \"sslCrt\": \"default.crt\", \"sslKey\": \"default.key\"}, {\"host\": \"banana-NAMESPACE.**.com\", \"port\": \"443\", \"ssl\": 1, \"path\": [\"/solr/banana/src/index.html\"], \"defaultPath\": \"/solr/banana/src/index.html\", \"sslCrt\": \"default.crt\", \"sslKey\": \"default.key\"}]}"
+spec:
+  selector:
+    service: solrbanana
+  ports:
+    -
+      port: 8983
+      name: solr-tcp
+      targetPort: 8983
