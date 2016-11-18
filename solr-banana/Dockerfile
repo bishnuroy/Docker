@@ -14,7 +14,7 @@
 # limitations under the License.
 
 FROM java:openjdk-8-jre
-MAINTAINER Minoru Osuka "minoru.osuka@gmail.com"
+MAINTAINER bishnu "bishnuroy@gmail.com"
 
 ENV SOLR_GROUP solr
 ENV SOLR_USER solr
