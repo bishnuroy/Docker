@@ -1,6 +1,6 @@
-#FROM ciocldreg101.innovate.ibm.com/ciohcld/centos6
+#FROM image-location/centos6
 FROM centos:centos6
-MAINTAINER Divya Prakash dprakas2@in.ibm.com
+MAINTAINER Bishnu bishnuroy@gmail.com
 
 
 # add our user and group first to make sure their IDs get assigned consistently, regardless of whatever dependencies get added
