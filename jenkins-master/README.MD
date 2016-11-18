@@ -38,3 +38,7 @@
       
       kubectl --server=(kub-master-server):8080 --namespace=NAMESPACE exec -ti (container-name) -- bash
 
+
+or you can run:
+
+docker run -d --name jenkins-master -it -p 8081:8081 -v /var/lib/jenkins:/var/lib/jenkins:rw solrreg.***.com/jenkins:latest
