@@ -1,9 +1,9 @@
-# BUILD USING:  docker build --rm -t ciocldreg101.innovate.ibm.com/ciohcld/jenkins
-# RUN USING: docker run -d --name jenkins-master -it -p 8081:8081 -v /var/lib/jenkins:/var/lib/jenkins:rw ciocldreg101.innovate.ibm.com/ciohcld/jenkins
+# BUILD USING:  docker build --rm -t imahge-name/jenkins
+# RUN USING: docker run -d --name jenkins-master -it -p 8081:8081 -v /var/lib/jenkins:/var/lib/jenkins:rw imahge-name/jenkins
 
-FROM ciocldreg101.innovate.ibm.com/ciohcld/centos7
+FROM imagelocation/centos7
 
-MAINTAINER Vijay Ladla email:vijay.ladla@in.ibm.com
+MAINTAINER Bishnu Ladla email:bishnuroy@gmail.com
 
 # Add docker yum repository.
 COPY docker.repo /etc/yum.repos.d/
