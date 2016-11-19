@@ -19,14 +19,14 @@ Docker is a tool that is designed to benefit both developers and system administ
     1) created "isadmin" user for docker setup.
 
 
-**Install Engine on each node**
+**Install Engine on each node(node01 & Node02)**
 
     1) Update the yum packages in all nodes.
     
          $ sudo yum update
      
     2) Run the installation script.
-  ```  
+  ``` 
          [isadmin@consul01 ~]$ curl -sSL https://get.docker.com/ | sh
          [sudo] password for isadmin:
           + sudo -E sh -c 'sleep 3; yum -y -q install docker-engine'
