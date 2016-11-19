@@ -27,7 +27,7 @@ Docker is a tool that is designed to benefit both developers and system administ
      
     2) Run the installation script.
   ``` 
-         [isadmin@consul01 ~]$ curl -sSL https://get.docker.com/ | sh
+         [isadmin@node01 ~]$ curl -sSL https://get.docker.com/ | sh
          [sudo] password for isadmin:
           + sudo -E sh -c 'sleep 3; yum -y -q install docker-engine'
           warning: /var/cache/yum/x86_64/7/docker-main-repo/packages/docker-engine-selinux-1.12.3-1.el7.centos.noarch.rpm:      Header V4 RSA/SHA512 Signature, key ID 2c52609d: NOKEY
@@ -45,7 +45,7 @@ Docker is a tool that is designed to benefit both developers and system administ
 
 Remember that you will have to log out and back in for this to take effect!
 
-[isadmin@consul01 ~]$
+[isadmin@node01 ~]$
  ```             
     3)After install run below command in all node if you want to run docker with "isadmin" account
     
@@ -53,18 +53,18 @@ Remember that you will have to log out and back in for this to take effect!
       
     4)Edit OPTIONS variable (consul01.techeidolon.com server we will use as a image registry server, we can used saparate server for Image Registry)
     
-        [isadmin@consul01 ~]$ cat /
+        [isadmin@node01 ~]$ cat /
         etc/sysconfig/docker
         #-H tcp://0.0.0.0:2375 -H unix:///var/run/docker.sock
         DOCKER_OPTS="-H tcp://0.0.0.0:2375 -H unix:///var/run/docker.sock --insecure-registry=consul01.techeidolon.com"
-        [isadmin@consul01 ~]$
+        [isadmin@node01 ~]$
         
     5)Start Docker in all node.
     
 ```
-        [isadmin@consul01 ~]$ sudo systemctl start docker.service
-        [isadmin@consul01 ~]$
-        [isadmin@consul01 ~]$ sudo systemctl enable docker.service
+        [isadmin@node01 ~]$ sudo systemctl start docker.service
+        [isadmin@node01 ~]$
+        [isadmin@node01 ~]$ sudo systemctl enable docker.service
             Created symlink from /etc/systemd/system/multi-user.target.wants/docker.service to /usr/lib/systemd/system/docker.service.
 
 ``` 
