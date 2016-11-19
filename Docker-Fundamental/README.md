@@ -293,3 +293,4 @@ ccd848d7867f        swarm               "/swarm join --advert"   26 seconds ago 
 [root@node02 ~]#
 ```
 
+Ref:  https://docs.docker.com/swarm/install-manual/
