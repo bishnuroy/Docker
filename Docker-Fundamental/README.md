@@ -19,7 +19,7 @@ Docker is a tool that is designed to benefit both developers and system administ
     1) created "isadmin" user for docker setup.
 
 
-**Install Engine on each node(node01 & Node02)**
+**Install Engine on each nodes, managers and consul servers**
 
     1) Update the yum packages in all nodes.
     
@@ -111,4 +111,131 @@ For more examples and ideas, visit:
   
     $ docker run -it ubuntu bash
     $ docker run -it centos bash
+
+
+
+#Set up a discovery backend
+
+
+1) login Console server and get the if of that server.
+    
+```
+[root@consul01 ~]# ifconfig |grep inet
+        inet 10.10.0.12  netmask 255.255.255.0  broadcast 10.10.0.255
+        inet6 fe80::a00:27ff:fe41:7292  prefixlen 64  scopeid 0x20<link>
+        inet 192.168.10.110  netmask 255.255.255.0  broadcast 192.168.10.255
+        inet6 fe80::a00:27ff:fef5:3de0  prefixlen 64  scopeid 0x20<link>
+        inet 127.0.0.1  netmask 255.0.0.0
+        inet6 ::1  prefixlen 128  scopeid 0x10<host>
+[root@consul01 ~]#
+```
+*IP:*  192.168.10.110
+
+2) Paste the launch command into the command line:
+        
+        $ docker run -d -p 8500:8500 --name=consul progrium/consul -server -bootstrap
+        
+```
+[root@consul01 ~]# docker run -d -p 8500:8500 --name=consul progrium/consul -server -bootstrap
+Unable to find image 'progrium/consul:latest' locally
+latest: Pulling from progrium/consul
+c862d82a67a2: Pull complete
+0e7f3c08384e: Pull complete
+0e221e32327a: Pull complete
+09a952464e47: Pull complete
+60a1b927414d: Pull complete
+4c9f46b5ccce: Pull complete
+417d86672aa4: Pull complete
+b0d47ad24447: Pull complete
+fd5300bd53f0: Pull complete
+a3ed95caeb02: Pull complete
+d023b445076e: Pull complete
+ba8851f89e33: Pull complete
+5d1cefca2a28: Pull complete
+Digest: sha256:8cc8023462905929df9a79ff67ee435a36848ce7a10f18d6d0faba9306b97274
+Status: Downloaded newer image for progrium/consul:latest
+448288f62189a30a701e065bb4469473631d42f92d4acb55d93e5a068e01a235
+[root@consul01 ~]#
+```
+
+
+3) Enter docker ps.
+
+```
+[root@consul01 ~]# docker ps
+CONTAINER ID        IMAGE               COMMAND                  CREATED              STATUS              PORTS                                                                            NAMES
+448288f62189        progrium/consul     "/bin/start -server -"   About a minute ago   Up About a minute   53/tcp, 53/udp, 8300-8302/tcp, 8400/tcp, 8301-8302/udp, 0.0.0.0:8500->8500/tcp   consul
+[root@consul01 ~]#
+
+```
+        
+#Create Swarm cluster
+
+1) connect to the managers server and use ifconfig to get its IP address.
+
+```
+[root@manager01 ~]# ifconfig |grep inet
+        inet 10.10.0.18  netmask 255.255.255.0  broadcast 10.10.0.255
+        inet6 fe80::a00:27ff:fe5c:e7a7  prefixlen 64  scopeid 0x20<link>
+        inet 192.168.10.101  netmask 255.255.255.0  broadcast 192.168.10.255
+        inet6 fe80::a00:27ff:fe59:37e9  prefixlen 64  scopeid 0x20<link>
+        inet 127.0.0.1  netmask 255.0.0.0
+        inet6 ::1  prefixlen 128  scopeid 0x10<host>
+[root@manager01 ~]#
+```
+Manager01: 192.168.10.101
+```
+[root@manager02 ~]# ifconfig |grep inet
+        inet 10.10.0.16  netmask 255.255.255.0  broadcast 10.10.0.255
+        inet6 fe80::a00:27ff:fe35:c7f  prefixlen 64  scopeid 0x20<link>
+        inet 192.168.10.102  netmask 255.255.255.0  broadcast 192.168.10.255
+        inet6 fe80::a00:27ff:fe53:8459  prefixlen 64  scopeid 0x20<link>
+        inet 127.0.0.1  netmask 255.0.0.0
+        inet6 ::1  prefixlen 128  scopeid 0x10<host>
+[root@manager02 ~]#
+```
+Manager02: 192.168.10.102
+
+
+
+2) To create the primary manager in a high-availability Swarm cluster, use the following syntax:
+
+        $ docker run -d -p 4000:4000 swarm manage -H :4000 --replication --advertise <manager0_ip>:4000 consul://<consul0_ip>:8500
+        
+```
+[root@manager01 ~]# docker run -d -p 4000:4000 swarm manage -H :4000 --replication --advertise 192.168.10.101:4000 consul://192.168.10.110:8500
+Unable to find image 'swarm:latest' locally
+latest: Pulling from library/swarm
+220609e0bc51: Pull complete
+b54bf338fe2f: Pull complete
+d53aac5750d5: Pull complete
+Digest: sha256:c9e1b4d4e399946c0542accf30f9a73500d6b0b075e152ed1c792214d3509d70
+Status: Downloaded newer image for swarm:latest
+9d0afea9262a3560d5e51bd6a6feef3927731b2e8d10205df203cf7e4b953507
+[root@manager01 ~]#
+```
+
+3) Enter docker ps
+
+```
+[root@manager01 ~]# docker ps
+CONTAINER ID        IMAGE               COMMAND                  CREATED              STATUS              PORTS                              NAMES
+9d0afea9262a        swarm               "/swarm manage -H :40"   About a minute ago   Up About a minute   2375/tcp, 0.0.0.0:4000->4000/tcp   ecstatic_noyce
+[root@manager01 ~]#
+```
+
+4) Start the secondary Swarm manager using following command.
+
+```
+[root@manager02 ~]# docker run -d -p 4000:4000 swarm manage -H :4000 --replication --advertise 192.168.10.102:4000 consul://192.168.10.110:8500
+Unable to find image 'swarm:latest' locally
+latest: Pulling from library/swarm
+220609e0bc51: Pull complete
+b54bf338fe2f: Pull complete
+d53aac5750d5: Pull complete
+Digest: sha256:c9e1b4d4e399946c0542accf30f9a73500d6b0b075e152ed1c792214d3509d70
+Status: Downloaded newer image for swarm:latest
+7b3c73307280ec7bb74945cdc67ac7603b2ed7326156d6581c0c18ba33677144
+[root@manager02 ~]#
+```
 
