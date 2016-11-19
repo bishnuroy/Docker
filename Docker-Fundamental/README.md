@@ -107,5 +107,8 @@ For more examples and ideas, visit:
 [isadmin@node02 ~]$
    ```
         
-        
+7)Run an Ubuntu, Centos, etc.. container with: 
+  
+    $ docker run -it ubuntu bash
+    $ docker run -it centos bash
 
