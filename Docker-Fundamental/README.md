@@ -168,6 +168,9 @@ CONTAINER ID        IMAGE               COMMAND                  CREATED        
 [root@consul01 ~]#
 
 ```
+
+**Console Link:** http://192.168.10.110:8500/
+
         
 #Create Swarm cluster
 
@@ -237,5 +240,56 @@ Digest: sha256:c9e1b4d4e399946c0542accf30f9a73500d6b0b075e152ed1c792214d3509d70
 Status: Downloaded newer image for swarm:latest
 7b3c73307280ec7bb74945cdc67ac7603b2ed7326156d6581c0c18ba33677144
 [root@manager02 ~]#
+```
+```
+[root@manager01 ~]# docker ps
+CONTAINER ID        IMAGE               COMMAND                  CREATED             STATUS              PORTS                              NAMES
+9d0afea9262a        swarm               "/swarm manage -H :40"   6 minutes ago       Up 6 minutes        2375/tcp, 0.0.0.0:4000->4000/tcp   ecstatic_noyce
+[root@manager01 ~]#
+```
+
+
+#Add Nodes in cluster.
+
+1) Connect to node0 and node1 in turn and join them to the cluster.
+
+```
+[root@node01 ~]# docker run -d swarm join --advertise=192.168.10.103:2375 consul://192.168.0.110:8500
+Unable to find image 'swarm:latest' locally
+latest: Pulling from library/swarm
+220609e0bc51: Pull complete
+b54bf338fe2f: Pull complete
+d53aac5750d5: Pull complete
+Digest: sha256:c9e1b4d4e399946c0542accf30f9a73500d6b0b075e152ed1c792214d3509d70
+Status: Downloaded newer image for swarm:latest
+WARNING: IPv4 forwarding is disabled. Networking will not work.
+917b3e54fa4aae73d12f02aecdd8d076866674b1c0720f11eb36e0d073a3c83c
+[root@node01 ~]#
+```
+```
+[root@node01 ~]# docker ps
+CONTAINER ID        IMAGE               COMMAND                  CREATED             STATUS              PORTS               NAMES
+917b3e54fa4a        swarm               "/swarm join --advert"   31 seconds ago      Up 30 seconds       2375/tcp            reverent_fermi
+[root@node01 ~]#
+```
+
+```
+[root@node02 ~]# docker run -d swarm join --advertise=192.168.10.104:2375 consul://192.168.0.110:8500
+Unable to find image 'swarm:latest' locally
+latest: Pulling from library/swarm
+220609e0bc51: Pull complete
+b54bf338fe2f: Pull complete
+d53aac5750d5: Pull complete
+Digest: sha256:c9e1b4d4e399946c0542accf30f9a73500d6b0b075e152ed1c792214d3509d70
+Status: Downloaded newer image for swarm:latest
+WARNING: IPv4 forwarding is disabled. Networking will not work.
+ccd848d7867f675f17497ac1d7ff79736cf909ff1c4a0ec1dc1b3885ca151430
+[root@node02 ~]#
+```
+```
+[root@node02 ~]# docker ps
+CONTAINER ID        IMAGE               COMMAND                  CREATED             STATUS              PORTS               NAMES
+ccd848d7867f        swarm               "/swarm join --advert"   26 seconds ago      Up 26 seconds       2375/tcp            suspicious_keller
+[root@node02 ~]#
 ```
 
