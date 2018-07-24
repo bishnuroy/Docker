@@ -1,5 +1,6 @@
-test01 ansible_ssh_user=user_name
-test02 ansible_ssh_user=user_name
-test03 ansible_ssh_user=user_name
-test04 ansible_ssh_user=user_name
-test05 ansible_ssh_user=user_name
+[test10x]
+test101 ansible_ssh_user=user_name
+test102 ansible_ssh_user=user_name
+test103 ansible_ssh_user=user_name
+test104 ansible_ssh_user=user_name
+test105 ansible_ssh_user=user_name
