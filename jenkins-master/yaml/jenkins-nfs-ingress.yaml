@@ -53,7 +53,7 @@ spec:
   tls:
   - hosts:
     - FQDN_Name_OF_URL
-    secretName: tls_name
+    secretName: secret_name
 status:
   loadBalancer:
     ingress:
