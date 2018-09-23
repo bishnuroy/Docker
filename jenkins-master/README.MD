@@ -1,5 +1,7 @@
 
-#JENKINS DOCKER SETUP:
+#JENKINS DOCKER SETUP: 
+
+Updated  Dockerfile is here "https://github.com/bishnuroy/Jenkins"
 
 **Create Jenkins Image:**
 
@@ -27,8 +29,6 @@
       kubectl --server=(kub-master-server):8080 --namespace=NAMESPACE get pods
       kubectl --server=(kub-master-server):8080 --namespace=NAMESPACE get service
       kubectl --server=(kub-master-server):8080 --namespace=NAMESPACE get rc
-      kubectl --server=(kub-master-server):8080 --namespace=NAMESPACE get petset
-      
       kubectl --server=(kub-master-server):8080 --namespace=NAMESPACE describe pod (podName)
       kubectl --server=(kub-master-server):8080 --namespace=NAMESPACE describe service (serviceName)
   
