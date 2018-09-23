@@ -1,0 +1,60 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: jenkins
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: jenkins
+    spec:
+      volumes:
+        - name: jenkins-nfs
+          nfs:
+            server: "nfs-server-name-or-ip"
+            path: "path_of_shared_file" 
+      containers:
+      - name: jenkins
+        image: "Jenkins_Image"
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 8080
+        volumeMounts:
+        - name: jenkins-nfs
+          mountPath: "/var/jenkins_home"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: jenkins
+  namespace: jenkins
+spec:
+  ports:
+    - port: 8080
+      targetPort: 8080
+  selector:
+    app: jenkins
+---
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: jenkins
+  namespace: jenkins
+spec:
+  rules:
+  - host: "FQDN_Name_OF_URL"
+    http:
+      paths:
+      - backend:
+          serviceName: jenkins
+          servicePort: 8080
+        path: /
+  tls:
+  - hosts:
+    - FQDN_Name_OF_URL
+    secretName: tls_name
+status:
+  loadBalancer:
+    ingress:
+    - {}
